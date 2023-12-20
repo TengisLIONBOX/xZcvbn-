@@ -8,29 +8,24 @@ import axios from "axios";
 export const ChatList = () => {
   const [chats, setChats] = useState<any[]>([]);
   const local = localStorage.getItem("conversationId");
-
+  const newarr: any = [];
   const ref = async () => {
     const all = await axios.get("http://localhost:3000/api/chats", {});
     setChats(all?.data);
   };
 
-  // const a = chats.filter((el) => el.conversationId === local);
-  // var a = chats.filter(function (creature) {
-  //   return creature.conversationId == local;
-  // });
-
-  // const a = chats.map((item) => {
-  //   item.filter(function (creature: any) {
-  //     return creature.conversationId == local;
-  //   });
-  // });
   useEffect(() => {
     ref();
   }, []);
-  // console.log(a);
+  console.log(chats);
+  chats.map((el) => {
+    if (el.conversationId === local) {
+      return newarr.push(el);
+    }
+  });
   return (
     <div className="flex-1 overflow-y-auto flex flex-col items-start">
-      {chats.map((chat: Chat) => (
+      {newarr.map((chat: Chat) => (
         <ChatItem key={nanoid()} chat={chat} />
       ))}
     </div>

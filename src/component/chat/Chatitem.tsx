@@ -8,7 +8,6 @@ export const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
   useEffect(() => {
     if (chat.senderId === localStorage.getItem("senderId")) {
       setUserMessage(true);
-    } else {
     }
   }, []);
 

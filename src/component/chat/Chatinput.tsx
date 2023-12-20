@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -37,10 +36,21 @@ export const ChatInput = () => {
     setMe(nickname + "");
   }
 
+  const group_exit = () => {
+    localStorage.removeItem("conversationId");
+    location.reload();
+  };
+
   return (
     <div className="p-2">
       {grp ? (
         <>
+          <button
+            onClick={group_exit}
+            className="p-2 bg-red-500 text-white rounded mt-2"
+          >
+            EXIT GROUP
+          </button>
           <input
             type="text"
             className="border p-2 rounded w-full"
