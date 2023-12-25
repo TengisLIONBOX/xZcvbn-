@@ -1,49 +1,44 @@
-import { nanoid } from "nanoid";
-import { mongoApiRequest } from "zenly/utils/mongoApiReq";
+import { prisma } from "zenly/utils/prisma";
+import { Prisma, User } from "@prisma/client";
 
 export const authUser = async (
   email: string,
   name: string,
   imageUrl?: string
-) => {
+): Promise<{ response?: User; error?: unknown }> => {
   const { response: existingUser, error: findError } = await getUserByEmail(
     email
   );
   if (findError) return { error: findError };
   if (existingUser) return { response: existingUser };
-  const { response, error } = await createUser(email, name, imageUrl);
+  const { response, error } = await createUser({ email, name, imageUrl });
   if (error) return { error };
   return { response };
 };
 
 export const getUserByEmail = async (email: string) => {
-  const { response, error } = await mongoApiRequest("findOne", "users", {
-    filter: { email },
-  });
-  if (error) return { error };
-  return { response: response.document };
+  try {
+    const result = await prisma.user.findUnique({ where: { email } });
+    return { response: result };
+  } catch (error) {
+    return { error };
+  }
 };
 
-export const createUser = async (
-  email: string,
-  name: string,
-  imageUrl?: string
-) => {
-  const newUser = {
-    id: nanoid(),
-    name,
-    email,
-    imageUrl,
-  };
-  const { response, error } = await mongoApiRequest("insertOne", "users", {
-    document: newUser,
-  });
-  if (error) return { error };
-  return { response: newUser };
+export const createUser = async (input: Prisma.UserCreateInput) => {
+  try {
+    const result = await prisma.user.create({ data: input });
+    return { response: result };
+  } catch (error) {
+    return { error };
+  }
 };
 
-export const getAllUsers = async () => {
-  const { response, error } = await mongoApiRequest("find", "users", {});
-  if (error) return { error };
-  return { response: response.documents };
+export const getAllUsers = async (filter?: Prisma.UserWhereInput) => {
+  try {
+    const result = await prisma.user.findMany({ where: filter });
+    return { response: result };
+  } catch (error) {
+    return { error };
+  }
 };

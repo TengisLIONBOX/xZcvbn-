@@ -1,14 +1,22 @@
 "use client";
-
-import { UserContext } from "zenly/contexts/UserContext";
-import { User } from "zenly/types/Users";
-import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useUsers } from "zenly/hooks/UserUsers";
+import { useEffect } from "react";
 
 export const UserProvider = ({ children }: React.PropsWithChildren) => {
-  const [user, setUser] = useState<User | null>(null);
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+  const { setUser } = useUsers();
+  const router = useRouter();
+  useEffect(() => {
+    axios
+      .get("/api/users/me")
+      .then((res) => {
+        setUser(res.data.response);
+      })
+      .catch(() => {
+        router.push("/login");
+      });
+  }, []);
+
+  return <>{children}</>;
 };

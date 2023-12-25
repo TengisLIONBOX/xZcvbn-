@@ -1,9 +1,10 @@
 "use client";
 import { nanoid } from "nanoid";
-import { Chat } from "zenly/types";
 import { ChatItem } from "./Chatitem";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Chat } from "@prisma/client";
+import { getPathVariable } from "zenly/utils/url";
 
 export const ChatList = () => {
   const [chats, setChats] = useState<any[]>([]);
@@ -23,6 +24,9 @@ export const ChatList = () => {
       return newarr.push(el);
     }
   });
+
+  console.log(getPathVariable);
+
   return (
     <div className="flex-1 overflow-y-auto flex flex-col items-start">
       {newarr.map((chat: Chat) => (

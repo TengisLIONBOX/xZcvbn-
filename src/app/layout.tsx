@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "zenly/providers/UserProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  subsets: ["latin", "cyrillic-ext"],
+  weight: ["300", "400", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +21,7 @@ export default function RootLayout({
   return (
     <UserProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={`${roboto.className} bg-background`}>{children}</body>
       </html>
     </UserProvider>
   );

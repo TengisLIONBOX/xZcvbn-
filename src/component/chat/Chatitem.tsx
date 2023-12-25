@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Chat } from "zenly/types";
+import { Chat } from "@prisma/client";
 
 type ChatItemProps = { chat: Chat };
 export const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
@@ -12,12 +12,19 @@ export const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
   }, []);
 
   return (
-    <div
-      className={`inline-block p-2 m-2 rounded shadow ${
-        isUserMessage ? "bg-blue-500 text-white ml-auto " : "bg-white left-1"
-      }`}
-    >
-      {chat.content}
+    <div className={`inline-block ${isUserMessage ? " ml-auto " : " left-1"}`}>
+      <div>
+        <p className={`text-[12px] ${isUserMessage ? "hidden" : ""}`}>
+          {chat.senderId}
+        </p>
+        <p
+          className={`p-2 m-2 rounded shadow ${
+            isUserMessage ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          {chat.content}
+        </p>
+      </div>
     </div>
   );
 };
