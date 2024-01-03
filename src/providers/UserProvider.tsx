@@ -1,11 +1,11 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useUsers } from "zenly/hooks/UserUsers";
+import { useUser } from "zenly/hooks/userUser";
 import { useEffect } from "react";
 
 export const UserProvider = ({ children }: React.PropsWithChildren) => {
-  const { setUser } = useUsers();
+  const { setUser } = useUser();
   const router = useRouter();
   useEffect(() => {
     axios

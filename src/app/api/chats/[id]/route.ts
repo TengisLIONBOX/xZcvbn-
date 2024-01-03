@@ -6,19 +6,30 @@ import {
 import { getPathVariable } from "zenly/utils/url";
 
 export const GET = async (request: NextRequest) => {
-  const conversationId = getPathVariable(request, "/api/chats/");
-  const { response, error } = await getChatsByConversationById(conversationId);
-  if (error) return NextResponse.json(error, { status: 500 });
-  return NextResponse.json(response);
+  try {
+    const conversationId = getPathVariable(request, "/api/chats/");
+
+    const { response } = await getChatsByConversationById(conversationId);
+
+    console.log({ response });
+    return NextResponse.json({ response });
+  } catch (error) {
+    console.error("Error in GET request:", error);
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 };
 
 export const POST = async (request: NextRequest) => {
   const conversationId = getPathVariable(request, "/api/chats/");
   const data = await request.json();
-  console.log(conversationId);
-
   const { senderId, content } = data;
   const { response, error } = await sendChat(conversationId, senderId, content);
-  if (error) return NextResponse.json(error, { status: 500 });
-  return NextResponse.json(response);
+
+  console.log(response);
+  if (error) return NextResponse.json({ error }, { status: 500 });
+  return NextResponse.json({ response });
 };

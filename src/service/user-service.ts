@@ -1,11 +1,12 @@
-import { prisma } from "zenly/utils/prisma";
 import { Prisma, User } from "@prisma/client";
+import { SimpleResponse } from "zenly/types/simple-response";
+import { prisma } from "zenly/utils/prisma";
 
 export const authUser = async (
   email: string,
   name: string,
   imageUrl?: string
-): Promise<{ response?: User; error?: unknown }> => {
+): Promise<SimpleResponse<User>> => {
   const { response: existingUser, error: findError } = await getUserByEmail(
     email
   );

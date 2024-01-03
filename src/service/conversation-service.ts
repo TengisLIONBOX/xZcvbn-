@@ -1,71 +1,41 @@
+import { Conversation } from "@prisma/client";
+import { SimpleResponse } from "zenly/types/simple-response";
 import { prisma } from "zenly/utils/prisma";
-import { Prisma, Conversation } from "@prisma/client";
-// import { mongoApiRequest } from "zenly/utils/mongoApiReq";
 
-// export const getAllConversations = async (): Promise<
-//   SimpleResponse<Conversation[]>
-// > => {
-//   const { response, error } = await mongoApiRequest(
-//     "find",
-//     "conversations",
-//     {}
-//   );
-//   if (error) return { error };
-
-//   return { response: response.documents };
-// };
-
-// export const createConversation = async (
-//   members: string[]
-// ): Promise<SimpleResponse<Conversation>> => {
-//   const newConversation = {
-//     _id: nanoid(),
-//     members,
-//     createdAt: new Date(),
-//     updatedAt: new Date(),
-//   };
-//   const { response, error } = await mongoApiRequest(
-//     "insertOne",
-//     "conversations",
-//     {
-//       document: newConversation,
-//     }
-//   );
-//   if (error) return { error };
-
-//   return { response: newConversation };
-// };
-
-// export const getConversation = async (
-//   _id: string
-// ): Promise<SimpleResponse<Conversation>> => {
-//   const { response, error } = await mongoApiRequest(
-//     "findOne",
-//     "conversations",
-//     { filter: { _id } }
-//   );
-//   if (error) return { error };
-
-//   return { response };
-// };
-
-export const getAllConversations = async (
-  filter?: Prisma.ConversationWhereInput
-) => {
+export const getAllConversations = async (): Promise<
+  SimpleResponse<Conversation[]>
+> => {
   try {
-    const result = await prisma.conversation.findMany({ where: filter });
-    return { response: result };
+    const response = await prisma.conversation.findMany({
+      include: {
+        users: { include: { user: true } },
+      },
+    });
+    return { response };
   } catch (error) {
     return { error };
   }
 };
 
 export const createConversation = async (
-  input: Prisma.ConversationCreateInput
-) => {
+  users: string[]
+): Promise<SimpleResponse<Conversation>> => {
   try {
-    const result = await prisma.conversation.create({ data: input });
-    return { response: result };
+    const response = await prisma.conversation.create({
+      data: {
+        users: {
+          create: [
+            {
+              userId: users[0],
+            },
+            {
+              userId: users[1],
+            },
+          ],
+        },
+      },
+    });
+    return { response };
   } catch (error) {
     return { error };
   }
@@ -73,7 +43,9 @@ export const createConversation = async (
 
 export const getConversation = async (id: string) => {
   try {
-    const result = await prisma.conversation.findUnique({ where: { id } });
+    const result = await prisma.conversation.findUnique({
+      where: { id: "aaVYSqYRZymWGTKesNJCs" },
+    });
     return { response: result };
   } catch (error) {
     return { error };
