@@ -3,12 +3,12 @@ import { getConversation } from "zenly/service/conversation-service";
 import { getPathVariable } from "zenly/utils/url";
 
 export const GET = async (request: NextRequest) => {
-  const _id = getPathVariable(request, "/api/conversations/");
-  const { response, error } = await getConversation(_id);
+  const id = getPathVariable(request, "/api/conversations/");
+  const { response, error } = await getConversation(id);
   if (error) {
-    return NextResponse.json(error, { status: 404 });
+    return NextResponse.json({ error }, { status: 404 });
   }
-  return NextResponse.json(response);
+  return NextResponse.json({ response });
 };
 
 // PATCH/PUT -> /api/conversations/12

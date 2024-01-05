@@ -1,4 +1,4 @@
-import { Button } from "zenly/component/chat/Button";
+import { Button } from "zenly/components/Button";
 
 export default function LoginPage() {
   return (

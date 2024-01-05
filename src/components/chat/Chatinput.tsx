@@ -9,8 +9,8 @@ import useSWR from "swr";
 export const ChatInput = () => {
   const [message, setMessage] = useState("");
   // const [group, setGroup] = useState("");
-  const [grp, setGrp] = useState(true);
-  const [me, setMe] = useState("");
+  // const [grp, setGrp] = useState(true);
+  // const [me, setMe] = useState("");
 
   const { user } = useUser();
   const {
